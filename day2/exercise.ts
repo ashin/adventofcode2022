@@ -4,31 +4,39 @@ const PAPER = 'paper';
 const ROCK = 'rock';
 const SCISSORS = 'scissors';
 
-const SCORES = {
+type scoresType = {
+    [index: string]: number
+};
+const SCORES: scoresType = {
     'win': 6,
     'draw': 3,
     'lose': 0,
+};
+type instructionsType = {
+    [index: string]: string
+};
+const instructions: instructionsType = {
+    X: 'lose', 
+    Y: 'draw',
+    Z: 'win'
 };
 
 const MOVES = [
     {
         name: ROCK,
         enemy: 'A',
-        player: 'X',
         score: 1,
         beats: SCISSORS,
     },
     {
         name: PAPER,
         enemy: 'B',
-        player: 'Y',
         score: 2,
         beats: ROCK
     },
     {
         name: SCISSORS,
         enemy: 'C',
-        player: 'Z',
         score: 3,
         beats: PAPER
     },
@@ -36,19 +44,18 @@ const MOVES = [
 
 const getScore = (moves: string[]): number => {
     const enemyMove = MOVES.find(m => m.enemy === moves[0]);
-    const playerMove = MOVES.find(m => m.player === moves[1]);
-    let score = 0;
+    const instruction = instructions[moves[1]];
     
-    if(!enemyMove || !playerMove || enemyMove.beats === playerMove.name) {
-        score += SCORES.lose
-    } else if(enemyMove.name === playerMove.name) {
-        score += SCORES.draw;
+    let score = SCORES[instruction];
+    
+    if(!enemyMove || instruction === 'lose') {
+        score += MOVES.find(m => m.name === enemyMove?.beats)?.score || 0;
+    } else if(instruction === 'draw') {
+        score += enemyMove.score;
     } else {
-        score += SCORES.win;
+        score += MOVES.find(m => m.beats === enemyMove?.name)?.score || 0;
     }
-
-    console.log([enemyMove?.name, playerMove?.name, score, playerMove?.score].join(' ') + ' = ' + (score + (playerMove?.score || 0)));
-    score += playerMove?.score || 0;
+    
     return score;
 };
 
