@@ -1,0 +1,1 @@
+export default (day: number | string) => fetch(`https://adventofcode.com/2022/day/${day}/input`).then(r => r.json());
