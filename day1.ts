@@ -9,7 +9,7 @@ export const solution = (elvesList: string): number => {
         .split(NEW_LINE + NEW_LINE)
         .map(elfList => elfList.split(NEW_LINE).map(Number))
         .map(addNums)
-    return totalCaloriesOfEachElf.sort().pop() || 0;
+    return addNums(totalCaloriesOfEachElf.sort().slice(-3));
 };
 
 solution(exerciseInput);
