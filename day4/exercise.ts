@@ -1,18 +1,23 @@
 import exerciseInput from './input';
 
 const NEW_LINE = '\n';
-const addNums = (nums: number[]): number => nums.reduce((item, acc) => item + acc, 0);
 
-
-// In how many assignment pairs does one range fully contain the other?
+const buildRange = (range: number[]) : number[] => {
+    const arr: number[] = [];
+    for(let i = range[0]; i <= range[1]; i++) {
+        arr.push(i);
+    }
+    return arr;
+}
+// In how many assignment pairs do the ranges overlap?
 export const solution = (assignmentPairs: string): number => {
     return assignmentPairs
         .split(NEW_LINE)
-        .map(assignmentPair => assignmentPair.split(',').map(assignment => assignment.split('-').map(Number)))
+        .map(assignmentPair => assignmentPair.split(',').map(assignment => assignment.split('-').map(Number).sort()))
         .filter(assignmentPairs => {
             const [ first, second ] = assignmentPairs;
-            return (first[0] <= second[0] && first[1] >= second[1])
-             || (second[0] <= first[0] && second[1] >= first[1]);
+            const range = buildRange(first);
+            return range.indexOf(second[0]) > -1 || range.indexOf(second[1]) > -1;
         }).length;
 };
 
